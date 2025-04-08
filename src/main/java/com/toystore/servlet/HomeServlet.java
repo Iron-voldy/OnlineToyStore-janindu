@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Servlet that handles requests for the homepage, including toy listing and filtering.
@@ -85,6 +86,6 @@ public class HomeServlet extends HttpServlet {
                 .map(Toy::getCategory)
                 .distinct()
                 .sorted()
-                .toList();
+                .collect(Collectors.toList());  // Use this instead of toList()
     }
 }
