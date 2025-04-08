@@ -12,10 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Utility class for handling file operations.
- * Provides methods for reading from and writing to text files.
- */
 public class FileHandler {
     // Modified to use WEB-INF/data with dynamic path resolution
     private static final String DATA_DIRECTORY = "WEB-INF/data/";
@@ -25,19 +21,12 @@ public class FileHandler {
 
     private static ServletContext servletContext;
 
-    /**
-     * Sets the ServletContext for file operations
-     * @param context The ServletContext
-     */
     public static void setServletContext(ServletContext context) {
         servletContext = context;
         // Create directories when context is set
         initializeDirectories();
     }
 
-    /**
-     * Initialize directories
-     */
     private static void initializeDirectories() {
         if (servletContext != null) {
             String webInfDataPath = "/WEB-INF/data";
@@ -56,11 +45,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Gets the path to the toys data file
-     * @param context The context path (will be ignored if ServletContext is set)
-     * @return The path to the toys data file
-     */
     private static String getToysFilePath(String context) {
         if (servletContext != null) {
             return servletContext.getRealPath("/WEB-INF/data") + File.separator + TOYS_FILE_NAME;
@@ -74,11 +58,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Gets the path to the users data file
-     * @param context The context path (will be ignored if ServletContext is set)
-     * @return The path to the users data file
-     */
     private static String getUsersFilePath(String context) {
         if (servletContext != null) {
             return servletContext.getRealPath("/WEB-INF/data") + File.separator + USERS_FILE_NAME;
@@ -92,11 +71,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Gets the path to the payments data file
-     * @param context The context path (will be ignored if ServletContext is set)
-     * @return The path to the payments data file
-     */
     private static String getPaymentsFilePath(String context) {
         if (servletContext != null) {
             return servletContext.getRealPath("/WEB-INF/data") + File.separator + PAYMENTS_FILE_NAME;
@@ -110,11 +84,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Loads all toys from the toys.txt file
-     * @param context The servlet context path (optional, used as fallback)
-     * @return List of all toys
-     */
     public static List<Toy> loadToys(String context) {
         List<Toy> toys = new ArrayList<>();
         String filePath = getToysFilePath(context);
@@ -154,12 +123,6 @@ public class FileHandler {
         return toys;
     }
 
-    /**
-     * Saves all toys to the toys.txt file
-     * @param toys The list of toys to save
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
     public static boolean saveToys(List<Toy> toys, String context) {
         String filePath = getToysFilePath(context);
 
@@ -185,11 +148,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Loads all users from the users.txt file
-     * @param context The servlet context path (optional, used as fallback)
-     * @return List of all users
-     */
     public static List<User> loadUsers(String context) {
         List<User> users = new ArrayList<>();
         String filePath = getUsersFilePath(context);
@@ -249,12 +207,6 @@ public class FileHandler {
         return users;
     }
 
-    /**
-     * Saves all users to the users.txt file
-     * @param users The list of users to save
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
     public static boolean saveUsers(List<User> users, String context) {
         String filePath = getUsersFilePath(context);
 
@@ -280,11 +232,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Loads all payments from the payments.txt file
-     * @param context The servlet context path (optional, used as fallback)
-     * @return List of all payments
-     */
     public static List<Payment> loadPayments(String context) {
         List<Payment> payments = new ArrayList<>();
         String filePath = getPaymentsFilePath(context);
@@ -324,24 +271,13 @@ public class FileHandler {
         return payments;
     }
 
-    /**
-     * Saves a payment to the payments.txt file
-     * @param payment The payment to save
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
+
     public static boolean savePayment(Payment payment, String context) {
         List<Payment> payments = loadPayments(context);
         payments.add(payment);
         return savePayments(payments, context);
     }
 
-    /**
-     * Saves all payments to the payments.txt file
-     * @param payments The list of payments to save
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
     public static boolean savePayments(List<Payment> payments, String context) {
         String filePath = getPaymentsFilePath(context);
 
@@ -367,12 +303,6 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Finds a user by username
-     * @param username The username to search for
-     * @param context The servlet context path (optional, used as fallback)
-     * @return The user if found, null otherwise
-     */
     public static User findUserByUsername(String username, String context) {
         List<User> users = loadUsers(context);
 
@@ -385,12 +315,6 @@ public class FileHandler {
         return null;
     }
 
-    /**
-     * Finds a user by ID
-     * @param userId The user ID to search for
-     * @param context The servlet context path (optional, used as fallback)
-     * @return The user if found, null otherwise
-     */
     public static User findUserById(String userId, String context) {
         List<User> users = loadUsers(context);
 
@@ -403,13 +327,6 @@ public class FileHandler {
         return null;
     }
 
-    /**
-     * Authenticates a user with username and password
-     * @param username The username
-     * @param password The password
-     * @param context The servlet context path (optional, used as fallback)
-     * @return The user if authentication is successful, null otherwise
-     */
     public static User authenticateUser(String username, String password, String context) {
         List<User> users = loadUsers(context);
 

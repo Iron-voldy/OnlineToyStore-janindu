@@ -14,16 +14,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Servlet that handles requests for the homepage, including toy listing and filtering.
- */
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Handles GET requests - displays the homepage with toys
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,11 +70,6 @@ public class HomeServlet extends HttpServlet {
         request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
-    /**
-     * Extracts unique categories from the toy list
-     * @param toys List of toys
-     * @return List of unique categories
-     */
     private List<String> getUniqueCategories(List<Toy> toys) {
         return toys.stream()
                 .map(Toy::getCategory)

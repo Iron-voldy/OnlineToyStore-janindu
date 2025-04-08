@@ -13,16 +13,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.UUID;
 
-/**
- * Servlet that handles requests for selling toys (adding, updating, removing).
- */
 @WebServlet("/sell")
 public class SellToyServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Handles GET requests - displays the sell page or edit form
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -72,9 +66,6 @@ public class SellToyServlet extends HttpServlet {
         request.getRequestDispatcher("sell.jsp").forward(request, response);
     }
 
-    /**
-     * Handles POST requests - processes the form submission for adding/updating toys
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

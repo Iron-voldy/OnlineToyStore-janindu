@@ -14,16 +14,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Servlet that handles requests for the user profile page.
- */
 @WebServlet("/profile")
 public class ProfileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Handles GET requests - displays the user profile page
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,9 +41,6 @@ public class ProfileServlet extends HttpServlet {
         request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 
-    /**
-     * Handles POST requests - updates user profile information
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

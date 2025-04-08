@@ -11,17 +11,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 
-/**
- * Servlet to serve image files from the application data directory.
- * This allows images to be stored within the application but still accessible to users.
- */
 @WebServlet("/images/*")
 public class ImageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Handles GET requests - serves the requested image file
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,11 +58,6 @@ public class ImageServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Determines the content type based on the file extension
-     * @param fileName The file name
-     * @return The content type
-     */
     private String getContentTypeFromFileName(String fileName) {
         if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
             return "image/jpeg";

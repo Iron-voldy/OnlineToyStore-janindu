@@ -4,17 +4,8 @@ import com.toystore.model.Toy;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Utility class for sorting toys using various algorithms.
- * Implements selection sort algorithm for sorting toys by age range and price.
- */
 public class SortingUtil {
 
-    /**
-     * Sorts toys by age range using selection sort algorithm
-     * @param toys List of toys to sort
-     * @return A new list with toys sorted by age range (ascending)
-     */
     public static List<Toy> selectionSortByAgeRange(List<Toy> toys) {
         // Create a new list to avoid modifying the original
         List<Toy> sortedToys = new ArrayList<>(toys);
@@ -41,11 +32,6 @@ public class SortingUtil {
         return sortedToys;
     }
 
-    /**
-     * Sorts toys by price using selection sort algorithm
-     * @param toys List of toys to sort
-     * @return A new list with toys sorted by price (ascending)
-     */
     public static List<Toy> selectionSortByPrice(List<Toy> toys) {
         // Create a new list to avoid modifying the original
         List<Toy> sortedToys = new ArrayList<>(toys);
@@ -72,11 +58,7 @@ public class SortingUtil {
         return sortedToys;
     }
 
-    /**
-     * Sorts toys by age range and then by price (if ages are equal)
-     * @param toys List of toys to sort
-     * @return A new list with toys sorted by age range and price
-     */
+
     public static List<Toy> selectionSortByAgeAndPrice(List<Toy> toys) {
         // Create a new list to avoid modifying the original
         List<Toy> sortedToys = new ArrayList<>(toys);

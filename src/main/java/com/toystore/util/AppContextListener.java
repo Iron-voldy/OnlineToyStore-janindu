@@ -5,10 +5,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-/**
- * Application context listener to initialize resources when the application starts.
- * This listener sets up the ServletContext for file operations.
- */
 @WebListener
 public class AppContextListener implements ServletContextListener {
 

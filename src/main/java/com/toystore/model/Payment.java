@@ -2,19 +2,15 @@ package com.toystore.model;
 
 import java.util.Date;
 
-/**
- * Represents a payment in the Online Toy Store system.
- * This class encapsulates all payment attributes.
- */
 public class Payment {
     private String id;
     private String userId;
     private String toyId;
     private double amount;
     private int quantity;
-    private String cardNumber; // Last 4 digits only
+    private String cardNumber;
     private Date paymentDate;
-    private String status; // "completed", "refunded", "failed"
+    private String status;
     private String transactionId;
 
     // Constructors

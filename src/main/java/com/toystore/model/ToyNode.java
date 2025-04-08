@@ -1,9 +1,5 @@
 package com.toystore.model;
 
-/**
- * Represents a node in the linked list for toy inventory.
- * Each node contains a Toy object and a reference to the next node.
- */
 public class ToyNode {
     private Toy toy;
     private ToyNode next;

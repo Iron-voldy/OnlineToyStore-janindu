@@ -15,17 +15,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Servlet that handles payment processing for toy purchases.
- */
 @WebServlet("/payment")
 public class PaymentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Handles GET requests - displays the payment page for a specific toy
-     * or shows payment history if no ID is provided
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -85,9 +78,6 @@ public class PaymentServlet extends HttpServlet {
         request.getRequestDispatcher("payment.jsp").forward(request, response);
     }
 
-    /**
-     * Handles POST requests - processes the payment form submission
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

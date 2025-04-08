@@ -1,17 +1,13 @@
 package com.toystore.model;
 
-/**
- * Represents a toy in the Online Toy Store system.
- * This class encapsulates all attributes of a toy item.
- */
 public class Toy {
     private String id;
     private String name;
     private String description;
     private double price;
-    private int ageRange; // Minimum age recommendation
+    private int ageRange;
     private String category;
-    private String seller; // User ID of the seller
+    private String seller;
     private int quantity;
     private String imageUrl;
 
@@ -105,21 +101,12 @@ public class Toy {
         this.imageUrl = imageUrl;
     }
 
-    /**
-     * Converts a Toy object to a string representation for storage in text file
-     * @return A string with toy data separated by commas
-     */
     public String toFileString() {
         return id + "," + name + "," + description + "," + price + "," +
                 ageRange + "," + category + "," + seller + "," +
                 quantity + "," + imageUrl;
     }
 
-    /**
-     * Creates a Toy object from a string representation from the text file
-     * @param data The string data from file
-     * @return A new Toy object
-     */
     public static Toy fromFileString(String data) {
         String[] parts = data.split(",");
         if (parts.length >= 9) {

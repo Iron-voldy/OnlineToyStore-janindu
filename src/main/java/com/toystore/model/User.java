@@ -1,9 +1,5 @@
 package com.toystore.model;
 
-/**
- * Represents a user in the Online Toy Store system.
- * This class encapsulates all user attributes.
- */
 public class User {
     private String id;
     private String username;
@@ -95,28 +91,15 @@ public class User {
         this.userType = userType;
     }
 
-    /**
-     * Checks if user is an admin
-     * @return true if user is an admin, false otherwise
-     */
     public boolean isAdmin() {
         return "admin".equalsIgnoreCase(userType);
     }
 
-    /**
-     * Converts a User object to a string representation for storage in text file
-     * @return A string with user data separated by commas
-     */
     public String toFileString() {
         return id + "," + username + "," + password + "," + email + "," +
                 fullName + "," + address + "," + phone + "," + userType;
     }
 
-    /**
-     * Creates a User object from a string representation from the text file
-     * @param data The string data from file
-     * @return A new User object
-     */
     public static User fromFileString(String data) {
         String[] parts = data.split(",");
         if (parts.length >= 8) {

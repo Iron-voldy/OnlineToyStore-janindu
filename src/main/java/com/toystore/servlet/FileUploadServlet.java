@@ -18,18 +18,12 @@ import java.util.UUID;
 
 import com.toystore.model.User;
 
-/**
- * Servlet that handles file uploads for toy images.
- */
 @WebServlet("/upload")
 public class FileUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final int MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif"};
 
-    /**
-     * Handles POST requests - processes file uploads
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

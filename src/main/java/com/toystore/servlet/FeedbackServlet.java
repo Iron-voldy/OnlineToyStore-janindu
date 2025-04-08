@@ -12,16 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Servlet that handles feedback submission for toys.
- */
 @WebServlet("/feedback")
 public class FeedbackServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Handles GET requests - displays the feedback form for a specific toy
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -60,11 +54,6 @@ public class FeedbackServlet extends HttpServlet {
         request.getRequestDispatcher("feedback.jsp").forward(request, response);
     }
 
-    /**
-     * Handles POST requests - processes the feedback form submission
-     * Note: In a real application, this would save the feedback to a file or database
-     * For this project, we'll just display a success message
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
