@@ -19,6 +19,9 @@ public class AppContextListener implements ServletContextListener {
         // Set the ServletContext for file operations
         FileHandler.setServletContext(context);
 
+        // Initialize required directories
+        DirectoryInitializer.initializeDirectories(context);
+
         System.out.println("Application initialized: ServletContext set for file operations");
     }
 

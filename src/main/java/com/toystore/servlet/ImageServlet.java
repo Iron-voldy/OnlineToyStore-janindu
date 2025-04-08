@@ -48,10 +48,7 @@ public class ImageServlet extends HttpServlet {
         }
 
         // Set the content type based on the file extension
-        String contentType = getServletContext().getMimeType(imagePath);
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
+        String contentType = getContentTypeFromFileName(pathInfo);
         response.setContentType(contentType);
 
         // Set content length
@@ -65,6 +62,23 @@ public class ImageServlet extends HttpServlet {
             while ((bytesRead = in.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
             }
+        }
+    }
+
+    /**
+     * Determines the content type based on the file extension
+     * @param fileName The file name
+     * @return The content type
+     */
+    private String getContentTypeFromFileName(String fileName) {
+        if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
+            return "image/jpeg";
+        } else if (fileName.toLowerCase().endsWith(".png")) {
+            return "image/png";
+        } else if (fileName.toLowerCase().endsWith(".gif")) {
+            return "image/gif";
+        } else {
+            return "application/octet-stream";
         }
     }
 }

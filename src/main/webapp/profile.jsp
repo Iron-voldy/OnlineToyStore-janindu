@@ -158,6 +158,38 @@
             </section>
         </div>
 
+            <!-- Account Options Section -->
+            <section class="mt-4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Account Options</h3>
+
+                    <div class="flex flex-col space-y-3">
+                        <a href="payment?action=history" class="flex items-center text-gray-700 hover:text-purple-600 transition-colors duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            View Purchase History
+                        </a>
+
+                        <a href="sell" class="flex items-center text-gray-700 hover:text-purple-600 transition-colors duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Sell New Toy
+                        </a>
+
+                        <% if (user.isAdmin()) { %>
+                            <a href="payment?action=history&view=all" class="flex items-center text-gray-700 hover:text-purple-600 transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                </svg>
+                                View All Purchases (Admin)
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
+            </section>
+
         <!-- Your Listed Toys Section -->
         <section class="mt-12">
             <div class="flex justify-between items-center mb-6">

@@ -33,11 +33,12 @@
                     <h1 class="text-2xl font-bold">ToyLand</h1>
                 </div>
 
-                <div class="flex items-center space-x-4">
-                    <a href="profile" class="hover:text-purple-200 transition-colors duration-300">Profile</a>
-                    <a href="sell" class="hover:text-purple-200 transition-colors duration-300">Sell</a>
-                    <a href="logout" class="bg-purple-800 hover:bg-purple-900 px-4 py-2 rounded-md transition-colors duration-300">Logout</a>
-                </div>
+                 <div class="flex items-center space-x-4">
+                       <a href="profile" class="hover:text-purple-200 transition-colors duration-300">Profile</a>
+                       <a href="sell" class="hover:text-purple-200 transition-colors duration-300">Sell</a>
+                       <a href="payment?action=history" class="hover:text-purple-200 transition-colors duration-300">Orders</a>
+                       <a href="logout" class="bg-purple-800 hover:bg-purple-900 px-4 py-2 rounded-md transition-colors duration-300">Logout</a>
+                 </div>
             </div>
         </div>
     </header>

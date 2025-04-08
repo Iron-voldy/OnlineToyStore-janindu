@@ -144,6 +144,10 @@ public class SellToyServlet extends HttpServlet {
 
             // Set image URL if provided, or use a default image
             if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+                // If it doesn't start with 'images/', assume it's a path that needs to be prefixed
+                if (!imageUrl.startsWith("images/") && !imageUrl.startsWith("/api/placeholder")) {
+                    imageUrl = "images/" + imageUrl;
+                }
                 toy.setImageUrl(imageUrl);
             } else {
                 toy.setImageUrl("/api/placeholder/300/300");

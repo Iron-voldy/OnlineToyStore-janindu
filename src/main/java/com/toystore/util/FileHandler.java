@@ -1,5 +1,6 @@
 package com.toystore.util;
 
+import com.toystore.model.Payment;
 import com.toystore.model.Toy;
 import com.toystore.model.User;
 
@@ -20,6 +21,7 @@ public class FileHandler {
     private static final String DATA_DIRECTORY = "WEB-INF/data/";
     private static final String TOYS_FILE_NAME = "toys.txt";
     private static final String USERS_FILE_NAME = "users.txt";
+    private static final String PAYMENTS_FILE_NAME = "payments.txt";  // Added for payments
 
     private static ServletContext servletContext;
 
@@ -86,6 +88,24 @@ public class FileHandler {
                 return context + DATA_DIRECTORY + USERS_FILE_NAME;
             } else {
                 return "data" + File.separator + USERS_FILE_NAME;
+            }
+        }
+    }
+
+    /**
+     * Gets the path to the payments data file
+     * @param context The context path (will be ignored if ServletContext is set)
+     * @return The path to the payments data file
+     */
+    private static String getPaymentsFilePath(String context) {
+        if (servletContext != null) {
+            return servletContext.getRealPath("/WEB-INF/data") + File.separator + PAYMENTS_FILE_NAME;
+        } else {
+            // If servletContext is not set, use the provided context or fallback
+            if (context != null && !context.isEmpty()) {
+                return context + DATA_DIRECTORY + PAYMENTS_FILE_NAME;
+            } else {
+                return "data" + File.separator + PAYMENTS_FILE_NAME;
             }
         }
     }
@@ -163,61 +183,6 @@ public class FileHandler {
             e.printStackTrace();
             return false;
         }
-    }
-
-    /**
-     * Adds a new toy to the toys.txt file
-     * @param toy The toy to add
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
-    public static boolean addToy(Toy toy, String context) {
-        // Generate a unique ID if it's not set
-        if (toy.getId() == null || toy.getId().isEmpty()) {
-            toy.setId(UUID.randomUUID().toString());
-        }
-
-        List<Toy> toys = loadToys(context);
-        toys.add(toy);
-        return saveToys(toys, context);
-    }
-
-    /**
-     * Updates an existing toy in the toys.txt file
-     * @param updatedToy The toy with updated information
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
-    public static boolean updateToy(Toy updatedToy, String context) {
-        List<Toy> toys = loadToys(context);
-
-        for (int i = 0; i < toys.size(); i++) {
-            if (toys.get(i).getId().equals(updatedToy.getId())) {
-                toys.set(i, updatedToy);
-                return saveToys(toys, context);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Removes a toy from the toys.txt file
-     * @param toyId The ID of the toy to remove
-     * @param context The servlet context path (optional, used as fallback)
-     * @return true if successful, false otherwise
-     */
-    public static boolean removeToy(String toyId, String context) {
-        List<Toy> toys = loadToys(context);
-
-        for (int i = 0; i < toys.size(); i++) {
-            if (toys.get(i).getId().equals(toyId)) {
-                toys.remove(i);
-                return saveToys(toys, context);
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -310,6 +275,93 @@ public class FileHandler {
             return true;
         } catch (IOException e) {
             System.err.println("Error saving users: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Loads all payments from the payments.txt file
+     * @param context The servlet context path (optional, used as fallback)
+     * @return List of all payments
+     */
+    public static List<Payment> loadPayments(String context) {
+        List<Payment> payments = new ArrayList<>();
+        String filePath = getPaymentsFilePath(context);
+
+        try {
+            // Ensure directory exists
+            File file = new File(filePath);
+            if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+
+            // Create file if it doesn't exist
+            if (!file.exists()) {
+                file.createNewFile();
+                System.out.println("Created payments file: " + filePath);
+                return payments; // Return empty list for a new file
+            }
+
+            // Read all lines from the file
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    if (line.trim().isEmpty()) continue;
+
+                    Payment payment = Payment.fromFileString(line);
+                    if (payment != null) {
+                        payments.add(payment);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading payments: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return payments;
+    }
+
+    /**
+     * Saves a payment to the payments.txt file
+     * @param payment The payment to save
+     * @param context The servlet context path (optional, used as fallback)
+     * @return true if successful, false otherwise
+     */
+    public static boolean savePayment(Payment payment, String context) {
+        List<Payment> payments = loadPayments(context);
+        payments.add(payment);
+        return savePayments(payments, context);
+    }
+
+    /**
+     * Saves all payments to the payments.txt file
+     * @param payments The list of payments to save
+     * @param context The servlet context path (optional, used as fallback)
+     * @return true if successful, false otherwise
+     */
+    public static boolean savePayments(List<Payment> payments, String context) {
+        String filePath = getPaymentsFilePath(context);
+
+        try {
+            // Ensure directory exists
+            File file = new File(filePath);
+            if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+
+            // Write all payments to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+                for (Payment payment : payments) {
+                    writer.write(payment.toFileString());
+                    writer.newLine();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error saving payments: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

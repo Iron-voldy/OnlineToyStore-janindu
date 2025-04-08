@@ -71,7 +71,7 @@
         <section class="bg-white rounded-lg shadow-md p-6 mb-8">
             <h3 class="text-xl font-semibold mb-4"><%= isEditing ? "Edit Toy" : "Add New Toy" %></h3>
 
-            <form action="sell" method="post">
+            <form action="sell" method="post" id="toyForm">
                 <% if (isEditing) { %>
                     <input type="hidden" name="id" value="<%= toyToEdit.getId() %>">
                 <% } %>
@@ -123,12 +123,33 @@
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
                     </div>
 
+                    <!-- Image Upload Section -->
                     <div>
-                        <label for="imageUrl" class="block text-gray-700 text-sm font-bold mb-2">Image URL</label>
-                        <input type="text" id="imageUrl" name="imageUrl"
-                               value="<%= isEditing && toyToEdit.getImageUrl() != null ? toyToEdit.getImageUrl() : "" %>"
-                               placeholder="Leave empty for default image"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Toy Image</label>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1">
+                                <div class="relative border border-gray-300 rounded-md overflow-hidden">
+                                    <input type="file" id="imageFile" accept="image/*"
+                                           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                           onchange="handleImageUpload()">
+                                    <div class="p-3 text-center bg-gray-100 hover:bg-gray-200 transition-colors duration-300">
+                                        <span id="upload-text">Choose Image</span>
+                                        <div id="upload-progress" class="hidden mt-2 h-2 bg-gray-200 rounded-full">
+                                            <div id="progress-bar" class="h-full bg-purple-600 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="upload-error" class="text-red-600 text-xs mt-1 hidden"></div>
+                            </div>
+
+                            <div class="w-24 h-24 border border-gray-300 rounded-md overflow-hidden">
+                                <img id="image-preview" src="<%= isEditing && toyToEdit.getImageUrl() != null && !toyToEdit.getImageUrl().isEmpty() && !toyToEdit.getImageUrl().startsWith("/api/placeholder") ? toyToEdit.getImageUrl() : "/api/placeholder/96/96" %>"
+                                     alt="Toy image preview" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <input type="hidden" id="imageUrl" name="imageUrl"
+                               value="<%= isEditing && toyToEdit.getImageUrl() != null ? toyToEdit.getImageUrl() : "" %>">
+                        <p class="text-xs text-gray-500 mt-1">Max size: 5MB. Formats: JPG, PNG, GIF</p>
                     </div>
 
                     <div class="md:col-span-2">
@@ -215,5 +236,98 @@
             </div>
         </div>
     </footer>
+
+    <!-- JavaScript for image upload -->
+    <script>
+        function handleImageUpload() {
+            const fileInput = document.getElementById('imageFile');
+            const file = fileInput.files[0];
+            const uploadText = document.getElementById('upload-text');
+            const uploadProgress = document.getElementById('upload-progress');
+            const progressBar = document.getElementById('progress-bar');
+            const imagePreview = document.getElementById('image-preview');
+            const imageUrlInput = document.getElementById('imageUrl');
+            const uploadError = document.getElementById('upload-error');
+
+            // Reset error message
+            uploadError.classList.add('hidden');
+            uploadError.textContent = '';
+
+            if (!file) return;
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                uploadError.textContent = 'File size exceeds 5MB limit';
+                uploadError.classList.remove('hidden');
+                return;
+            }
+
+            // Validate file type
+            const fileType = file.type.toLowerCase();
+            if (!fileType.startsWith('image/jpeg') &&
+                !fileType.startsWith('image/png') &&
+                !fileType.startsWith('image/gif')) {
+                uploadError.textContent = 'Only JPG, PNG, and GIF files are allowed';
+                uploadError.classList.remove('hidden');
+                return;
+            }
+
+            // Show upload progress
+            uploadText.textContent = 'Uploading...';
+            uploadProgress.classList.remove('hidden');
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Create XHR request
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'upload', true);
+
+            // Handle progress
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    progressBar.style.width = percentComplete + '%';
+                }
+            };
+
+            // Handle response
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Success - update the image URL input and preview
+                    imageUrlInput.value = xhr.responseText;
+                    imagePreview.src = xhr.responseText;
+                    uploadText.textContent = 'Upload Complete';
+                } else {
+                    // Error
+                    uploadError.textContent = 'Upload failed: ' + xhr.statusText;
+                    uploadError.classList.remove('hidden');
+                    uploadText.textContent = 'Choose Image';
+                }
+                uploadProgress.classList.add('hidden');
+                progressBar.style.width = '0%';
+            };
+
+            // Handle error
+            xhr.onerror = function() {
+                uploadError.textContent = 'Upload failed. Please try again.';
+                uploadError.classList.remove('hidden');
+                uploadText.textContent = 'Choose Image';
+                uploadProgress.classList.add('hidden');
+                progressBar.style.width = '0%';
+            };
+
+            // Show preview image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Send the upload
+            xhr.send(formData);
+        }
+    </script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.toystore.model.User" %>
+<%@ page import="com.toystore.model.Payment" %>
+<%@ page import="com.toystore.model.Toy" %>
 
 <%
     // Get the user from the session
@@ -14,6 +17,13 @@
     if (successMessage == null) {
         successMessage = "Thank you for your purchase!";
     }
+
+    // Get payment and toy details
+    Payment payment = (Payment) request.getAttribute("payment");
+    Toy toy = (Toy) request.getAttribute("toy");
+
+    // Format for displaying date
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm");
 %>
 
 <!DOCTYPE html>
@@ -55,6 +65,42 @@
 
             <p class="text-gray-600 mb-6"><%= successMessage %></p>
 
+            <% if (payment != null) { %>
+                <div class="bg-gray-100 p-4 rounded-md mb-6 text-left">
+                    <h3 class="font-semibold text-gray-800 mb-3">Order Details</h3>
+
+                    <div class="mb-2">
+                        <span class="text-gray-600">Transaction ID:</span>
+                        <span class="text-gray-800 ml-2"><%= payment.getTransactionId() %></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="text-gray-600">Date:</span>
+                        <span class="text-gray-800 ml-2"><%= dateFormat.format(payment.getPaymentDate()) %></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="text-gray-600">Item:</span>
+                        <span class="text-gray-800 ml-2"><%= toy != null ? toy.getName() : "Toy" %></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="text-gray-600">Quantity:</span>
+                        <span class="text-gray-800 ml-2"><%= payment.getQuantity() %></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="text-gray-600">Amount:</span>
+                        <span class="text-gray-800 ml-2">$<%= String.format("%.2f", payment.getAmount()) %></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="text-gray-600">Payment Method:</span>
+                        <span class="text-gray-800 ml-2">Credit Card (<%= payment.getCardNumber() %>)</span>
+                    </div>
+                </div>
+            <% } %>
+
             <div class="bg-gray-100 p-4 rounded-md mb-6 text-left">
                 <h3 class="font-semibold text-gray-800 mb-2">Shipping Details</h3>
                 <p class="text-gray-600"><%= user.getFullName() != null ? user.getFullName() : user.getUsername() %></p>
@@ -63,9 +109,15 @@
             </div>
 
             <div class="space-y-4">
-                <a href="home" class="inline-block bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition-colors duration-300">
-                    Continue Shopping
-                </a>
+                <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <a href="home" class="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition-colors duration-300">
+                        Continue Shopping
+                    </a>
+
+                    <a href="payment?action=history" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300 transition-colors duration-300">
+                        View Order History
+                    </a>
+                </div>
 
                 <p class="text-gray-500 text-sm">
                     A confirmation email has been sent to your email address.

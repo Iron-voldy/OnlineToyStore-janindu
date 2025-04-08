@@ -1,6 +1,8 @@
 package com.toystore.servlet;
 
+import com.toystore.controller.PaymentController;
 import com.toystore.controller.ToyController;
+import com.toystore.model.Payment;
 import com.toystore.model.Toy;
 import com.toystore.model.User;
 
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Servlet that handles payment processing for toy purchases.
@@ -21,6 +24,7 @@ public class PaymentServlet extends HttpServlet {
 
     /**
      * Handles GET requests - displays the payment page for a specific toy
+     * or shows payment history if no ID is provided
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,15 +39,36 @@ public class PaymentServlet extends HttpServlet {
         }
 
         String toyId = request.getParameter("id");
+        String action = request.getParameter("action");
+        String contextPath = getServletContext().getRealPath("/");
 
-        // Check if toy ID is provided
-        if (toyId == null || toyId.trim().isEmpty()) {
-            response.sendRedirect("home");
+        // Show payment history if no toy ID is provided or action is "history"
+        if ((toyId == null || toyId.trim().isEmpty()) || "history".equals(action)) {
+            PaymentController paymentController = new PaymentController(contextPath);
+            List<Payment> payments;
+
+            // If admin user, show all payments. Otherwise, show only user's payments
+            if (user.isAdmin() && "all".equals(request.getParameter("view"))) {
+                payments = paymentController.getAllPayments();
+            } else {
+                payments = paymentController.getPaymentsByUser(user.getId());
+            }
+
+            // Get toy details for each payment
+            ToyController toyController = new ToyController(contextPath);
+            for (Payment payment : payments) {
+                Toy toy = toyController.getToyById(payment.getToyId());
+                if (toy != null) {
+                    request.setAttribute("toy_" + payment.getId(), toy);
+                }
+            }
+
+            request.setAttribute("payments", payments);
+            request.getRequestDispatcher("payment-history.jsp").forward(request, response);
             return;
         }
 
-        // Get the toy information
-        String contextPath = getServletContext().getRealPath("/");
+        // Show payment page for a specific toy
         ToyController toyController = new ToyController(contextPath);
         Toy toy = toyController.getToyById(toyId);
 
@@ -77,11 +102,21 @@ public class PaymentServlet extends HttpServlet {
 
         String toyId = request.getParameter("toyId");
         String quantity = request.getParameter("quantity");
+        String cardNumber = request.getParameter("cardNumber");
+        String cardName = request.getParameter("cardName");
+        String expiryDate = request.getParameter("expiryDate");
+        String cvv = request.getParameter("cvv");
 
         // Validate parameters
         if (toyId == null || toyId.trim().isEmpty() ||
-                quantity == null || quantity.trim().isEmpty()) {
-            response.sendRedirect("home");
+                quantity == null || quantity.trim().isEmpty() ||
+                cardNumber == null || cardNumber.trim().isEmpty() ||
+                cardName == null || cardName.trim().isEmpty() ||
+                expiryDate == null || expiryDate.trim().isEmpty() ||
+                cvv == null || cvv.trim().isEmpty()) {
+
+            request.setAttribute("error", "All fields are required");
+            request.getRequestDispatcher("payment.jsp").forward(request, response);
             return;
         }
 
@@ -107,13 +142,21 @@ public class PaymentServlet extends HttpServlet {
                 return;
             }
 
-            // Update toy quantity (simulating a purchase)
-            toy.setQuantity(toy.getQuantity() - qty);
-            toyController.updateToy(toy);
+            // Process payment
+            PaymentController paymentController = new PaymentController(contextPath);
+            Payment payment = paymentController.processPayment(user, toy, qty, cardNumber);
 
-            // Set success message
-            request.setAttribute("success", "Payment successful! Your toy will be shipped soon.");
-            request.getRequestDispatcher("payment-success.jsp").forward(request, response);
+            if (payment != null) {
+                // Set success message and payment details
+                request.setAttribute("success", "Payment successful! Your toy will be shipped soon.");
+                request.setAttribute("payment", payment);
+                request.setAttribute("toy", toy);
+                request.getRequestDispatcher("payment-success.jsp").forward(request, response);
+            } else {
+                request.setAttribute("error", "Payment processing failed. Please try again.");
+                request.setAttribute("toy", toy);
+                request.getRequestDispatcher("payment.jsp").forward(request, response);
+            }
 
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid quantity");
