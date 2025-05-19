@@ -34,10 +34,12 @@
                 </div>
 
                  <div class="flex items-center space-x-4">
-                       <a href="profile" class="hover:text-purple-200 transition-colors duration-300">Profile</a>
-                       <a href="sell" class="hover:text-purple-200 transition-colors duration-300">Sell</a>
-                       <a href="payment?action=history" class="hover:text-purple-200 transition-colors duration-300">Orders</a>
-                       <a href="logout" class="bg-purple-800 hover:bg-purple-900 px-4 py-2 rounded-md transition-colors duration-300">Logout</a>
+                     <a href="profile" class="hover:text-purple-200 transition-colors duration-300">Profile</a>
+                     <a href="sell" class="hover:text-purple-200 transition-colors duration-300">Sell</a>
+                     <a href="payment?action=history" class="hover:text-purple-200 transition-colors duration-300">Orders</a>
+                     <!-- Add this new link -->
+                     <a href="wishlist" class="hover:text-purple-200 transition-colors duration-300">Wishlists</a>
+                     <a href="logout" class="bg-purple-800 hover:bg-purple-900 px-4 py-2 rounded-md transition-colors duration-300">Logout</a>
                  </div>
             </div>
         </div>
@@ -134,6 +136,12 @@
                             <a href="payment?id=<%= toy.getId() %>"
                                class="flex-1 bg-purple-600 text-white text-center py-2 rounded-md hover:bg-purple-700 transition-colors duration-300">
                                 Buy
+                            </a>
+                            <a href="wishlist/add-to-item?toyId=<%= toy.getId() %>"
+                               class="flex-1 bg-pink-600 text-white text-center py-2 rounded-md hover:bg-pink-700 transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
                             </a>
                             <a href="feedback?id=<%= toy.getId() %>"
                                class="flex-1 bg-gray-200 text-gray-800 text-center py-2 rounded-md hover:bg-gray-300 transition-colors duration-300">
