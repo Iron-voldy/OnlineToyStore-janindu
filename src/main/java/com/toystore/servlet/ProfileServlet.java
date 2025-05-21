@@ -17,6 +17,15 @@ import java.util.List;
 @WebServlet("/profile")
 public class ProfileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private UserController userController;
+    private ToyController toyController;
+
+    @Override
+    public void init() throws ServletException {
+        String contextPath = getServletContext().getRealPath("/");
+        userController = new UserController(contextPath);
+        toyController = new ToyController(contextPath);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,9 +38,6 @@ public class ProfileServlet extends HttpServlet {
             response.sendRedirect("index.jsp");
             return;
         }
-
-        String contextPath = getServletContext().getRealPath("/");
-        ToyController toyController = new ToyController(contextPath);
 
         // Get toys listed by the user
         List<Toy> userToys = toyController.getToysBySeller(user.getId());
@@ -63,11 +69,8 @@ public class ProfileServlet extends HttpServlet {
 
         // Validate required fields
         if (fullName == null || fullName.trim().isEmpty() ||
-                email == null || email.trim().isEmpty() ||
-                address == null || address.trim().isEmpty() ||
-                phone == null || phone.trim().isEmpty()) {
-
-            request.setAttribute("error", "All fields are required");
+                email == null || email.trim().isEmpty()) {
+            request.setAttribute("error", "Name and email are required");
             request.getRequestDispatcher("profile.jsp").forward(request, response);
             return;
         }
@@ -94,21 +97,18 @@ public class ProfileServlet extends HttpServlet {
             updatedUser.setPassword(password);
         }
 
-        // Save the updated user
-        String contextPath = getServletContext().getRealPath("/");
-        UserController userController = new UserController(contextPath);
-        boolean success = userController.updateUser(updatedUser);
+        try {
+            // Save the updated user
+            userController.updateUser(updatedUser);
 
-        if (success) {
             // Update session with the new user information
             session.setAttribute("user", updatedUser);
             request.setAttribute("message", "Profile updated successfully");
-        } else {
-            request.setAttribute("error", "Failed to update profile");
+        } catch (IOException e) {
+            request.setAttribute("error", "Failed to update profile: " + e.getMessage());
         }
 
         // Get user's toys for display
-        ToyController toyController = new ToyController(contextPath);
         List<Toy> userToys = toyController.getToysBySeller(currentUser.getId());
         request.setAttribute("userToys", userToys);
 

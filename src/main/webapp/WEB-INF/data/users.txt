@@ -1,1 +1,2 @@
 4442f941-0ed2-4fba-95d2-34c587ae270c,admin,admin123,admin@toystore.com,Admin User,Admin Address,1234567890,admin
+af64c05f-84a8-43a8-9a0c-4246b7a6c3e6,sadila,20020224Ha@,sadilapunchihewa03@gmail.com,hasindu wanninayake,No 24/2,monnankulama,Galgamuwa,0771212321,regular

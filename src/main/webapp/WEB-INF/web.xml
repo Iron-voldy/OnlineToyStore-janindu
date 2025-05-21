@@ -15,9 +15,9 @@
     <listener-class>com.toystore.util.AppContextListener</listener-class>
   </listener>
 
-
   <!-- Session Configuration -->
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
+
 </web-app>

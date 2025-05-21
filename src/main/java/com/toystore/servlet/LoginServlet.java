@@ -14,6 +14,13 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private UserController userController;
+
+    @Override
+    public void init() throws ServletException {
+        String contextPath = getServletContext().getRealPath("/");
+        userController = new UserController(contextPath);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -24,16 +31,13 @@ public class LoginServlet extends HttpServlet {
         // Validate parameters
         if (username == null || username.trim().isEmpty() ||
                 password == null || password.trim().isEmpty()) {
-
             request.setAttribute("error", "Username and password are required");
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
 
         // Authenticate the user
-        String contextPath = getServletContext().getRealPath("/");
-        UserController userController = new UserController(contextPath);
-        User user = userController.authenticateUser(username, password);
+        User user = userController.authenticate(username, password);
 
         if (user != null) {
             // Create a new session and store the user
