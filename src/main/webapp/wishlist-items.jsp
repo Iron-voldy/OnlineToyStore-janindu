@@ -267,6 +267,7 @@
                             }
                         });
 
+<<<<<<< HEAD
                         if (toyMap != null) { // Add null check for toyMap
                             for (WishlistItem item : sortedItems) {
                                 Toy toy = toyMap.get(item.getToyId());
@@ -281,6 +282,21 @@
                                         stars += "★";
                                     }
                                 }
+=======
+                        for (WishlistItem item : sortedItems) {
+                            Toy toy = toyMap.get(item.getToyId());
+                            if (toy == null) continue;
+
+                            // Generate stars based on priority
+                            String stars = "";
+                            for (int i = 1; i <= 5; i++) {
+                                if (i <= item.getPriority()) {
+                                    stars += "☆";
+                                } else {
+                                    stars += "★";
+                                }
+                            }
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
                         %>
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                             <div class="relative">
@@ -336,11 +352,14 @@
                                 <% } %>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <% }
                         } else { %>
                             <div class="col-span-3 bg-white p-4 rounded-lg shadow-md text-center">
                                 <p class="text-gray-600">There was an error loading the toys. Please try refreshing the page.</p>
                             </div>
+=======
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
                         <% } %>
                     </div>
                 <% } %>

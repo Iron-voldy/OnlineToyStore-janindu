@@ -20,7 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 @WebServlet({"/wishlist/*", "/wishlist"})
+=======
+@WebServlet("/wishlist/*")
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
 public class WishlistServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -36,10 +40,15 @@ public class WishlistServlet extends HttpServlet {
             return;
         }
 
+<<<<<<< HEAD
+=======
+        String pathInfo = request.getPathInfo();
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
         String contextPath = getServletContext().getRealPath("/");
         WishlistController wishlistController = new WishlistController(contextPath);
         ToyController toyController = new ToyController(contextPath);
 
+<<<<<<< HEAD
         // Handle direct add-item request from home page
         String action = request.getParameter("action");
         if ("add-item".equals(action)) {
@@ -84,6 +93,8 @@ public class WishlistServlet extends HttpServlet {
 
         String pathInfo = request.getPathInfo();
 
+=======
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
         if (pathInfo == null || pathInfo.equals("/")) {
             // List all wishlists
             List<Wishlist> wishlists = wishlistController.getUserWishlists(user.getId());
@@ -125,7 +136,11 @@ public class WishlistServlet extends HttpServlet {
 
             request.setAttribute("wishlist", wishlist);
             request.setAttribute("owner", owner);
+<<<<<<< HEAD
             request.setAttribute("toyMap", toyMap);  // Make sure this is set
+=======
+            request.setAttribute("toyMap", toyMap);
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
             request.getRequestDispatcher("/wishlist-items.jsp").forward(request, response);
             return;
         }
@@ -189,6 +204,7 @@ public class WishlistServlet extends HttpServlet {
 
             request.setAttribute("wishlist", wishlist);
             request.setAttribute("allToys", toyController.getAllToys());
+<<<<<<< HEAD
 
             // Ensure toyMap is set to prevent NullPointerException
             Map<String, Toy> toyMap = new HashMap<>();
@@ -200,6 +216,8 @@ public class WishlistServlet extends HttpServlet {
             }
             request.setAttribute("toyMap", toyMap);
 
+=======
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
             request.getRequestDispatcher("/wishlist-items.jsp").forward(request, response);
             return;
         }
@@ -244,6 +262,7 @@ public class WishlistServlet extends HttpServlet {
             request.setAttribute("wishlist", wishlist);
             request.setAttribute("item", item);
             request.setAttribute("editing", true);
+<<<<<<< HEAD
 
             // Get toys for each wishlist item to prevent NullPointerException
             Map<String, Toy> toyMap = new HashMap<>();
@@ -255,6 +274,8 @@ public class WishlistServlet extends HttpServlet {
             }
             request.setAttribute("toyMap", toyMap);
 
+=======
+>>>>>>> c2206e0557b49f6b5db23eb22406e94bd17c8809
             request.getRequestDispatcher("/wishlist-items.jsp").forward(request, response);
             return;
         }
